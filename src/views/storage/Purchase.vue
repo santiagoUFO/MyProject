@@ -1,7 +1,7 @@
 <template>
   <section class="main-content">
     <el-row>
-      <span style="font-size:12px;display:inline-block;margin-bottom:20px;">销售单</span>
+      <span style="font-size:12px;display:inline-block;margin-bottom:20px;">采购单</span>
       <el-col :span="24" clsss="form-content">
         <!-- 表单 -->
         <el-form>
@@ -17,11 +17,28 @@
             <el-input placeholder="请输入单据编号" style='width:15%'></el-input>
           </el-form-item>
           <el-form-item>
+            <el-col :span='10'>
+              <span style='color:#606266'>供应商：</span>
+              <el-select placeholder="请选择" v-model="value">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </el-col>
+            <el-col :span='10'>
+              <span style='color:#606266'>采购员：</span>
+              <el-select v-model="value1">
+                <el-option v-for="item in options1" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+
+            </el-col>
+          </el-form-item>
+          <el-form-item>
             <el-button type="primary">立即查询</el-button>
             <el-button type="warning">批量导出</el-button>
             <el-button type="warning">打印预览</el-button>
-            <el-button type="warning" style="float:right">销售商品统计</el-button>
-            <el-button type="warning" style="float:right">新增出库</el-button>
+            <el-button type="warning" style="float:right">进货统计</el-button>
+            <el-button type="warning" style="float:right" @click='addPurForm'>添加采购单</el-button>
           </el-form-item>
         </el-form>
         <!-- 表格 -->
@@ -85,6 +102,52 @@ const ERR_OK = "000";
 export default {
   data() {
     return {
+      options: [
+        {
+          value: "选项1",
+          label: "黄金糕"
+        },
+        {
+          value: "选项2",
+          label: "双皮奶"
+        },
+        {
+          value: "选项3",
+          label: "蚵仔煎"
+        },
+        {
+          value: "选项4",
+          label: "龙须面"
+        },
+        {
+          value: "选项5",
+          label: "北京烤鸭"
+        }
+      ],
+      value: "",
+      options1: [
+        {
+          value: "选项1",
+          label: "黄金糕"
+        },
+        {
+          value: "选项2",
+          label: "双皮奶"
+        },
+        {
+          value: "选项3",
+          label: "蚵仔煎"
+        },
+        {
+          value: "选项4",
+          label: "龙须面"
+        },
+        {
+          value: "选项5",
+          label: "北京烤鸭"
+        }
+      ],
+      value1: "",
       formInline: {
         user: {
           name: "",
@@ -94,7 +157,6 @@ export default {
         }
       },
       tableData: [],
-      options: [],
       places: [],
       dialogFormVisible: false,
       editLoading: false,
@@ -112,27 +174,30 @@ export default {
       response = response.data;
       if (response.code === ERR_OK) {
         this.tableData = response.datas.slice(0, 10);
-        console.log(this.tableData)
+        console.log(this.tableData);
       }
     });
     this.$http.get("/api/getOptions").then(response => {
       response = response.data;
       console.log(response);
       if (response.code === ERR_OK) {
-        this.options = response.datas;
+        // this.options = response.datas;
         this.places = response.places;
       }
     });
   },
   methods: {
     setFirstClass(ss) {
-      const {columnIndex} = ss
+      const { columnIndex } = ss;
       if (columnIndex === 9) {
-        return 'addMyClassName'
+        return "addMyClassName";
       }
     },
+    addPurForm() {
+      this.$router.push({path: '/purchase-form'})
+    },
     cellClick(row, column, cell, event) {
-      this.$router.push({path: '/sale-detail', query: {aa: '1'}})
+      this.$router.push({ path: "/sale-detail", query: { aa: "1" } });
     },
     onSubmit() {
       this.$message("模拟数据，这个方法并不管用哦~");
@@ -216,24 +281,24 @@ export default {
   float: right;
   margin-left: 10px;
 }
-.total{
+.total {
   margin-top: 15px;
 }
-.total>span{
-  font-weight:bolder;
+.total > span {
+  font-weight: bolder;
   display: inline-block;
   margin-right: 12px;
 }
-.yellowColor{
+.yellowColor {
   color: #ff9909;
 }
 </style>
 <style>
-.main-content .addMyClassName{
-  color:#6389f4;
+.main-content .addMyClassName {
+  color: #6389f4;
 }
-.block>.el-pagination{
-  margin-top:10px;
+.block > .el-pagination {
+  margin-top: 10px;
 }
 </style>
 

@@ -5,7 +5,7 @@
       <el-row class="content">
         <!-- 左侧菜单栏 -->
         <el-col :span="3" class="aside">
-          <el-menu class="el-menu-vertical-demo" unique-opened :default-active='$route.path' router>
+          <el-menu class="el-menu-vertical-demo" unique-opened :default-active='defaultActive' router @select='menuSelect'>
             <el-menu-item index='/home'>
               <template slot="title">
                 <svg class="icon" aria-hidden="true">
@@ -25,16 +25,16 @@
                 <router-link to='/storage'>
                   <el-menu-item index="1-1">销售单</el-menu-item>
                 </router-link>
-                <router-link to='/form'>
+                <router-link to='/purchase'>
                   <el-menu-item index="1-2">采购单</el-menu-item>
                 </router-link>
                 <router-link to='/editor'>
                   <el-menu-item index="1-3">盘盈/亏单</el-menu-item>
                 </router-link>
-                <router-link to='/statistics'>
+                <router-link to='/stock'>
                   <el-menu-item index="1-4">货品库存</el-menu-item>
                 </router-link>
-                <router-link to='/authority'>
+                <router-link to='/form'>
                   <el-menu-item index="1-5">退款单</el-menu-item>
                 </router-link>
               </el-menu-item-group>
@@ -156,10 +156,12 @@ const ERR_OK = "000";
 export default {
   data() {
     return {
-      user: {}
+      user: {},
+      defaultActive: '',
     };
   },
   created() {
+    this.defaultActive = sessionStorage.getItem('defaultActive')
     this.$http.get("/api/user").then(response => {
       response = response.data;
       if (response.code === ERR_OK) {
@@ -171,6 +173,15 @@ export default {
     if (this.$route.path === "/") {
       this.$router.push({ path: "/index" });
     }
+  },
+  beforeDestroy() {
+    sessionStorage.setItem('defaultActive', '')
+  },
+  methods: {
+    menuSelect(val) {
+      console.log(val)
+      sessionStorage.setItem('defaultActive', val);
+    },
   },
   components: {
     "v-header": header
