@@ -28,13 +28,13 @@
                 <router-link to='/purchase'>
                   <el-menu-item index="1-2">采购单</el-menu-item>
                 </router-link>
-                <router-link to='/editor'>
+                <router-link to='/inventory-profit'>
                   <el-menu-item index="1-3">盘盈/亏单</el-menu-item>
                 </router-link>
                 <router-link to='/stock'>
                   <el-menu-item index="1-4">货品库存</el-menu-item>
                 </router-link>
-                <router-link to='/form'>
+                <router-link to='/goods-return'>
                   <el-menu-item index="1-5">退款单</el-menu-item>
                 </router-link>
               </el-menu-item-group>
@@ -46,7 +46,7 @@
                 </svg>
                 <span>促销管理</span>
               </template>
-               <router-link to='/table'>
+               <router-link to='/combination-meals'>
                   <el-menu-item index="2-1">套餐组合</el-menu-item>
                 </router-link>
             </el-submenu>

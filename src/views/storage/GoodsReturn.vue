@@ -1,7 +1,7 @@
 <template>
-  <section class="main-content">
+  <section class="goods-return">
     <el-row>
-      <span style="font-size:12px;display:inline-block;margin-bottom:20px;">采购单</span>
+      <span style="font-size:12px;display:inline-block;margin-bottom:20px;">退货单</span>
       <el-col :span="24" clsss="form-content">
         <!-- 表单 -->
         <el-form>
@@ -13,33 +13,32 @@
             <el-button size="mini">本周</el-button>
             <el-button size="mini">本月</el-button>
           </el-form-item>
-          <el-form-item label="单据编号:" size="mini">
-            <el-input placeholder="请输入单据编号" style='width:15%'></el-input>
-          </el-form-item>
           <el-form-item>
             <el-col :span='10'>
-              <span style='color:#606266'>供应商：</span>
-              <el-select placeholder="请选择" v-model="value" size="mini">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
+              <el-form-item label="单据编号:">
+                <el-input placeholder="请输入单据编号" style='width:40%' size="mini"></el-input>
+              </el-form-item>
             </el-col>
             <el-col :span='10'>
-              <span style='color:#606266'>采购员：</span>
-              <el-select v-model="value1" size="mini">
-                <el-option v-for="item in options1" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
-
+              <el-form-item label="退货类型:">
+                <el-select v-model="value1" size="mini">
+                  <el-option v-for="item in options1" :key="item.value" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
             </el-col>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" size="mini">立即查询</el-button>
             <el-button type="warning" size="mini">批量导出</el-button>
             <el-button type="warning" size="mini">打印预览</el-button>
-            <el-button type="warning" style="float:right" size="mini">进货统计</el-button>
-            <el-button type="warning" style="float:right" @click='addPurForm' size="mini">添加采购单</el-button>
           </el-form-item>
+          <el-form-item class="addReturn">
+            <el-row type="flex" justify="end">
+              <el-button type="warning" style="float:right" @click='addPurForm' size="mini">添加退货单</el-button>
+            </el-row>
+          </el-form-item>
+
         </el-form>
         <!-- 表格 -->
         <el-table :data="tableData" style="width: 100%" :header-cell-style="{background:'#e7edfd'}" :cell-class-name='setFirstClass' @cell-click='cellClick'>
@@ -49,13 +48,13 @@
           </el-table-column>
           <el-table-column prop="name" label="单据日期">
           </el-table-column>
-          <el-table-column prop="address" label="销售客户">
+          <el-table-column prop="address" label="退货对象">
           </el-table-column>
-          <el-table-column prop="address" label="应售金额">
+          <el-table-column prop="address" label="对应单据">
           </el-table-column>
-          <el-table-column prop="address" label="折后金额">
+          <el-table-column prop="address" label="结算账户">
           </el-table-column>
-          <el-table-column prop="address" label="已收金额">
+          <el-table-column prop="address" label="退货类型">
           </el-table-column>
           <el-table-column prop="address" label="结算">
           </el-table-column>
@@ -68,10 +67,6 @@
             </template> -->
           </el-table-column>
         </el-table>
-        <div class="total">
-          <span>应售总额：<span class="yellowColor">$1000</span></span>
-          <span>折后总额：<span class="yellowColor">$1000</span></span>
-        </div>
         <div class="block">
           <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-size="100" layout="prev, pager, next, jumper" :total="1000">
           </el-pagination>
@@ -194,10 +189,10 @@ export default {
       }
     },
     addPurForm() {
-      this.$router.push({path: '/purchase-form'})
+      this.$router.push({ path: "/add-goods-return" });
     },
     cellClick(row, column, cell, event) {
-      this.$router.push({ path: "/purchase-detail", query: { aa: "1" } });
+      this.$router.push({ path: "/goods-return-detail" });
     },
     onSubmit() {
       this.$message("模拟数据，这个方法并不管用哦~");
@@ -292,9 +287,12 @@ export default {
 .yellowColor {
   color: #ff9909;
 }
+.addReturn{
+  margin-top: -40px;
+}
 </style>
 <style>
-.main-content .addMyClassName {
+.goods-return .addMyClassName {
   color: #6389f4;
 }
 .block > .el-pagination {

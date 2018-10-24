@@ -1,7 +1,7 @@
 <template>
   <section class="main-content">
     <el-row>
-      <span style="font-size:12px;display:inline-block;margin-bottom:20px;">采购单</span>
+      <span style="font-size:12px;display:inline-block;margin-bottom:20px;">盘盈亏单</span>
       <el-col :span="24" clsss="form-content">
         <!-- 表单 -->
         <el-form>
@@ -13,32 +13,18 @@
             <el-button size="mini">本周</el-button>
             <el-button size="mini">本月</el-button>
           </el-form-item>
-          <el-form-item label="单据编号:" size="mini">
-            <el-input placeholder="请输入单据编号" style='width:15%'></el-input>
+          <el-form-item label="单据编号:">
+            <el-input placeholder="请输入单据编号" style='width:15%' size="mini"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-col :span='10'>
-              <span style='color:#606266'>供应商：</span>
-              <el-select placeholder="请选择" v-model="value" size="mini">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
-            </el-col>
-            <el-col :span='10'>
-              <span style='color:#606266'>采购员：</span>
-              <el-select v-model="value1" size="mini">
-                <el-option v-for="item in options1" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
-
-            </el-col>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" size="mini">立即查询</el-button>
-            <el-button type="warning" size="mini">批量导出</el-button>
-            <el-button type="warning" size="mini">打印预览</el-button>
-            <el-button type="warning" style="float:right" size="mini">进货统计</el-button>
-            <el-button type="warning" style="float:right" @click='addPurForm' size="mini">添加采购单</el-button>
+            <el-row>
+              <el-button type="primary" size='mini'>立即查询</el-button>
+              <el-button type="warning" size='mini'>批量导出</el-button>
+              <el-button type="warning" size='mini'>打印预览</el-button>
+            </el-row>
+            <el-row type='flex' justify="end">
+               <el-button type="warning" size='mini'>添加盘货单</el-button>
+            </el-row>
           </el-form-item>
         </el-form>
         <!-- 表格 -->
@@ -102,52 +88,6 @@ const ERR_OK = "000";
 export default {
   data() {
     return {
-      options: [
-        {
-          value: "选项1",
-          label: "黄金糕"
-        },
-        {
-          value: "选项2",
-          label: "双皮奶"
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎"
-        },
-        {
-          value: "选项4",
-          label: "龙须面"
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭"
-        }
-      ],
-      value: "",
-      options1: [
-        {
-          value: "选项1",
-          label: "黄金糕"
-        },
-        {
-          value: "选项2",
-          label: "双皮奶"
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎"
-        },
-        {
-          value: "选项4",
-          label: "龙须面"
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭"
-        }
-      ],
-      value1: "",
       formInline: {
         user: {
           name: "",
@@ -157,6 +97,7 @@ export default {
         }
       },
       tableData: [],
+      options: [],
       places: [],
       dialogFormVisible: false,
       editLoading: false,
@@ -181,7 +122,7 @@ export default {
       response = response.data;
       console.log(response);
       if (response.code === ERR_OK) {
-        // this.options = response.datas;
+        this.options = response.datas;
         this.places = response.places;
       }
     });
@@ -193,11 +134,8 @@ export default {
         return "addMyClassName";
       }
     },
-    addPurForm() {
-      this.$router.push({path: '/purchase-form'})
-    },
     cellClick(row, column, cell, event) {
-      this.$router.push({ path: "/purchase-detail", query: { aa: "1" } });
+      this.$router.push({ path: "/inventory-detail" });
     },
     onSubmit() {
       this.$message("模拟数据，这个方法并不管用哦~");

@@ -1,50 +1,36 @@
 <template>
-  <div class="sale-detail">
+  <div class="add-goods-return">
     <el-breadcrumb separator="/">
-      <el-breadcrumb-item :to="{ path: '/purchase' }">采购单</el-breadcrumb-item>
-      <el-breadcrumb-item>添加采购单</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/purchase' }">退货单</el-breadcrumb-item>
+      <el-breadcrumb-item>添加退货单</el-breadcrumb-item>
     </el-breadcrumb>
-    <el-col class='content'>
-      <el-row>
-        <el-col :span='7'>
-          <span>单据明细：XY00010</span>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col>
-          <div class="block">
-            <span class="demonstration">单据时间：</span>
-            <el-date-picker v-model="value1" type="date" placeholder="选择日期" size="small">
-            </el-date-picker>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row>
-        <span>&nbsp;&nbsp;&nbsp;&nbsp;供应商：</span>
-        <el-select v-model="value" placeholder="请选择" size="small">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-        </el-select>
-      </el-row>
-      <el-row>
-        <template>
-          <span>付款方式 :</span>
-          <el-radio-group v-model="radio2">
-            <el-radio :label="3">现金</el-radio>
-            <el-radio :label="6">挂账</el-radio>
-            <el-radio :label="9">银行卡</el-radio>
-          </el-radio-group>
-        </template>
-      </el-row>
-      <el-row>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;操作员：曹操</p>
-      </el-row>
-      <el-row style='position:relative'>
-        <span style='position:absolute;top:50%;margin-top:-6px'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;说明：</span>
-        <el-input type="textarea" :rows="3" placeholder="请输入内容" v-model="textarea" style="width:600px; margin-left:60px;">
+    <el-form class='content'>
+      <el-form-item>
+        <el-radio v-model="checkRadio" label="1">买家退货</el-radio>
+        <el-radio v-model="checkRadio" label="2">退货给供应商</el-radio>
+      </el-form-item>
+      <el-form-item label="单据编号：">
+        <span>XY00010</span>
+      </el-form-item>
+      <el-form-item label="单据时间：">
+        <el-date-picker v-model="value1" type="date" placeholder="选择日期" size="mini">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="结算方式：">
+        <el-radio-group v-model="radio2">
+          <el-radio :label="3">现金</el-radio>
+          <el-radio :label="6">挂账</el-radio>
+          <el-radio :label="9">银行卡</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="操作员：" class="operator">
+        <span>张佳怡</span>
+      </el-form-item>
+      <el-form-item label="说明：" class="explain">
+        <el-input type="textarea" :rows="3" placeholder="请输入内容" v-model="textarea" style="width:600px;">
         </el-input>
-      </el-row>
-      <el-row>
+      </el-form-item>
+      <el-row class="returnTab">
         <el-col :span="20">
           <el-table :data="tableData" ref="table" tooltip-effect="dark" border stripe :header-cell-style="{background:'#e7edfd'}">
             <el-table-column label="序列" type="index" align="center" width='60'></el-table-column>
@@ -102,17 +88,13 @@
         </el-col>
       </el-row>
       <el-row>
-          <span>折后应收：</span>
-          <el-input  size="mini" style="width:130px"></el-input>
-          <span style='margin-left:100px;'>整单折扣率:</span>
-          <el-input  size="mini" style="width:130px"></el-input>
-      </el-row>
-      <el-row>
-        <span>本单实收：</span>
-        <el-input size="mini" type='text' style="width:130px"></el-input>
+        <span>应退金额：</span>
+        <el-input size="mini" style="width:130px"></el-input>
+        <span style='margin-left:100px;'>实退金额:</span>
+        <el-input size="mini" style="width:130px"></el-input>
       </el-row>
       <el-button type="primary" size="mini">提交保存</el-button>
-    </el-col>
+    </el-form>
   </div>
 </template>
 <script>
@@ -130,6 +112,7 @@ export default {
           label: "双皮奶"
         }
       ],
+      checkRadio: "1",
       value: "",
       radio2: 3,
       textarea: "",
@@ -164,9 +147,20 @@ export default {
 .el-row {
   margin-bottom: 20px;
 }
+.returnTab{
+  margin-top: 20px;
+}
+.operator{
+  margin-left: 12px;
+}
+.explain{
+  margin-left: 25px;
+}
 </style>
 <style>
-
+.add-goods-return .el-form-item {
+  margin-bottom: 0;
+}
 </style>
 
 

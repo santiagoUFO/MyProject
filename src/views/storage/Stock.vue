@@ -116,6 +116,10 @@ export default {
 .select {
   vertical-align: middle;
 }
+.el-pagination {
+  text-align: center;
+  margin-top: 30px;
+}
 </style>
 
 

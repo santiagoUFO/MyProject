@@ -1,8 +1,8 @@
 <template>
-  <div class="sale-detail">
+  <div class="goods-return-detail">
     <el-breadcrumb separator="/">
-      <el-breadcrumb-item :to="{ path: '/storage' }">{{$route.path === '/sale-detail' ? '销售单':'采购单'}}</el-breadcrumb-item>
-      <el-breadcrumb-item>详情</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/goods-return' }">退货单</el-breadcrumb-item>
+      <el-breadcrumb-item>明细</el-breadcrumb-item>
     </el-breadcrumb>
     <el-row>
       <el-col :span="24" class="detail-content">
@@ -11,23 +11,26 @@
             <span>单据明细：XY00010</span>
           </el-col>
           <el-col :span='10'>
-            <div>
-              <span>结算方式：</span>
-            </div>
+            <span>对应单据：XY00010</span>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <span>单据时间：2018-04-23</span>
           </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="7">
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;客户：零售客户</p>
+          </el-col>
           <el-col :span='10'>
-            <span>操作员：李健</span>
+            <span>结算方式：</span>
           </el-col>
         </el-row>
         <el-row>
-          <p>客户：零售客户</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;操作员: 林峰</p>
         </el-row>
-        <el-row><p>说明：暂无</p></el-row>
+        <el-row><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;说明：暂无</p></el-row>
         <el-table :data="tableData" :header-cell-style="{background:'#e7edfd'}" border >
           <el-table-column type='index' label="序列">
           </el-table-column>
@@ -48,6 +51,10 @@
           <el-table-column prop='name' label="销售金额">
           </el-table-column>
         </el-table>
+        <el-row class="itemOfMoney">
+          <span>应退金额：<span style="fontWeight:700">￥1600</span></span>
+          <span>实退金额：<span style="fontWeight:700">￥1600</span></span>
+        </el-row>
       </el-col>
     </el-row>
   </div>
@@ -88,7 +95,12 @@ export default {
 .sale-detail{
   /* padding-left: 20px; */
 }
-
+.itemOfMoney{
+  margin-top: 20px;
+}
+.itemOfMoney span{
+  margin-right:10px;
+}
 </style>
 
 

@@ -1,34 +1,33 @@
 <template>
-  <div class="sale-detail">
+  <div class="meals-detail">
     <el-breadcrumb separator="/">
-      <el-breadcrumb-item :to="{ path: '/storage' }">{{$route.path === '/sale-detail' ? '销售单':'采购单'}}</el-breadcrumb-item>
-      <el-breadcrumb-item>详情</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/goods-return' }">套餐组合</el-breadcrumb-item>
+      <el-breadcrumb-item>明细</el-breadcrumb-item>
     </el-breadcrumb>
     <el-row>
       <el-col :span="24" class="detail-content">
         <el-row>
-          <el-col :span='7'>
-            <span>单据明细：XY00010</span>
-          </el-col>
-          <el-col :span='10'>
-            <div>
-              <span>结算方式：</span>
-            </div>
-          </el-col>
+          <span>单据编号：XY00010</span>
         </el-row>
         <el-row>
-          <el-col :span="8">
-            <span>单据时间：2018-04-23</span>
-          </el-col>
-          <el-col :span='10'>
-            <span>操作员：李健</span>
-          </el-col>
+          <span>套餐名称：2018-04-23</span>
         </el-row>
         <el-row>
-          <p>客户：零售客户</p>
+          <span>套餐条码：12356</span>
         </el-row>
-        <el-row><p>说明：暂无</p></el-row>
-        <el-table :data="tableData" :header-cell-style="{background:'#e7edfd'}" border >
+        <el-row>
+          <span>套餐价格：00</span>
+        </el-row>
+        <el-row>
+          <span>活动状态：进行中</span>
+        </el-row>
+        <el-row>
+          <span>单据日期：2015-10-12</span>
+        </el-row>
+         <el-row>
+          <span>活动日期：2015-10-12至2016-10-22</span>
+        </el-row>
+        <el-table :data="tableData" :header-cell-style="{background:'#e7edfd'}" border>
           <el-table-column type='index' label="序列">
           </el-table-column>
           <el-table-column prop='name' label="商品名称">
@@ -48,6 +47,10 @@
           <el-table-column prop='name' label="销售金额">
           </el-table-column>
         </el-table>
+        <el-row class="detailButton">
+          <el-button size="mini">返回</el-button>
+          <el-button type="warning" size='mini'>结束</el-button>
+        </el-row>
       </el-col>
     </el-row>
   </div>
@@ -57,38 +60,43 @@ const ERR_OK = "000";
 export default {
   data() {
     return {
-      tableData: [],
-    }
+      tableData: []
+    };
   },
   created() {
     this.$http.get("/api/getTable").then(response => {
       response = response.data;
       if (response.code === ERR_OK) {
         this.tableData = response.datas.slice(0, 2);
-        console.log(this.tableData)
+        console.log(this.tableData);
       }
     });
   },
-  methods: {
-
-  }
-
+  methods: {}
 };
 </script>
 <style scoped >
-.detail-content{
+.detail-content {
   background: #ffffff;
-  padding:30px;
-  margin-top:10px;
+  padding: 30px;
+  margin-top: 10px;
   font-size: 12px;
 }
-.el-row{
+.el-row {
   margin-bottom: 20px;
 }
-.sale-detail{
+.sale-detail {
   /* padding-left: 20px; */
 }
-
+.itemOfMoney {
+  margin-top: 20px;
+}
+.itemOfMoney span {
+  margin-right: 10px;
+}
+.detailButton{
+  margin-top: 20px;
+}
 </style>
 
 

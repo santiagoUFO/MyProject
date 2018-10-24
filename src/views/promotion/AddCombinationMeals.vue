@@ -1,50 +1,37 @@
 <template>
-  <div class="sale-detail">
+  <div class="add-meals">
     <el-breadcrumb separator="/">
-      <el-breadcrumb-item :to="{ path: '/purchase' }">采购单</el-breadcrumb-item>
-      <el-breadcrumb-item>添加采购单</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/combination-meals' }">套餐组合</el-breadcrumb-item>
+      <el-breadcrumb-item>添加套餐</el-breadcrumb-item>
     </el-breadcrumb>
-    <el-col class='content'>
-      <el-row>
-        <el-col :span='7'>
-          <span>单据明细：XY00010</span>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col>
-          <div class="block">
-            <span class="demonstration">单据时间：</span>
-            <el-date-picker v-model="value1" type="date" placeholder="选择日期" size="small">
-            </el-date-picker>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row>
-        <span>&nbsp;&nbsp;&nbsp;&nbsp;供应商：</span>
-        <el-select v-model="value" placeholder="请选择" size="small">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-        </el-select>
-      </el-row>
-      <el-row>
-        <template>
-          <span>付款方式 :</span>
-          <el-radio-group v-model="radio2">
-            <el-radio :label="3">现金</el-radio>
-            <el-radio :label="6">挂账</el-radio>
-            <el-radio :label="9">银行卡</el-radio>
-          </el-radio-group>
-        </template>
-      </el-row>
-      <el-row>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;操作员：曹操</p>
-      </el-row>
-      <el-row style='position:relative'>
-        <span style='position:absolute;top:50%;margin-top:-6px'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;说明：</span>
-        <el-input type="textarea" :rows="3" placeholder="请输入内容" v-model="textarea" style="width:600px; margin-left:60px;">
+    <el-form class='add-meals-content'>
+      <el-form-item label="单据编号：">
+        <span>XY00010</span>
+      </el-form-item>
+      <el-form-item label="套餐条码：">
+        <span>L1323546199</span>
+      </el-form-item>
+      <el-form-item label="套餐名称：">
+        <el-input placeholder="请输入套餐名称" style='width:300px' size='mini'></el-input>
+      </el-form-item>
+      <el-form-item label="套餐价格：">
+        <el-input placeholder="请输入内容" style='width:200px' size='mini'>
+          <i slot="suffix" class="iconfont" N>&#xe65b;</i>
         </el-input>
-      </el-row>
-      <el-row>
+      </el-form-item>
+      <el-form-item label="开始日期：">
+        <el-col :span='8'>
+          <el-date-picker v-model="value1" type="date" placeholder="选择日期" size="mini" style="width:200px">
+          </el-date-picker>
+        </el-col>
+        <el-col :span='10'>
+          <el-form-item label="结束日期：">
+            <el-date-picker v-model="value2" type="date" placeholder="选择日期" size="mini" style="width:200px">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+      </el-form-item>
+      <el-form-item class="returnTab">
         <el-col :span="20">
           <el-table :data="tableData" ref="table" tooltip-effect="dark" border stripe :header-cell-style="{background:'#e7edfd'}">
             <el-table-column label="序列" type="index" align="center" width='60'></el-table-column>
@@ -94,25 +81,19 @@
               </template>
             </el-table-column>
           </el-table>
-
         </el-col>
         <el-col :span='3' :offset='1'>
           <el-button class="el-icon-plus" @click.prevent="addRow()" size="mini"></el-button>
           <span>添加</span>
         </el-col>
-      </el-row>
-      <el-row>
-          <span>折后应收：</span>
-          <el-input  size="mini" style="width:130px"></el-input>
-          <span style='margin-left:100px;'>整单折扣率:</span>
-          <el-input  size="mini" style="width:130px"></el-input>
-      </el-row>
-      <el-row>
-        <span>本单实收：</span>
-        <el-input size="mini" type='text' style="width:130px"></el-input>
-      </el-row>
-      <el-button type="primary" size="mini">提交保存</el-button>
-    </el-col>
+      </el-form-item>
+      <el-form-item class="mealsButton">
+        <el-button size="mini">返回</el-button>
+        <el-button type="primary" size="mini">保存</el-button>
+      </el-form-item>
+
+    </el-form>
+
   </div>
 </template>
 <script>
@@ -120,24 +101,11 @@ export default {
   data() {
     return {
       value1: "",
-      options: [
-        {
-          value: "选项1",
-          label: "黄金糕"
-        },
-        {
-          value: "选项2",
-          label: "双皮奶"
-        }
-      ],
-      value: "",
-      radio2: 3,
-      textarea: "",
+      value2: "",
       tableData: []
     };
   },
   methods: {
-    // 增加行
     addRow() {
       var list = {
         rowNum: "",
@@ -154,19 +122,24 @@ export default {
   }
 };
 </script>
-<style scoped >
-.content {
-  background: #fff;
-  padding: 20px;
-  margin-top: 10px;
-  font-size: 12px;
+<style scoped>
+.add-meals-content {
+  background: #ffffff;
+  padding-left: 20px;
+  padding-bottom: 50px;
+  margin-top: 20px;
 }
-.el-row {
-  margin-bottom: 20px;
+.returnTab {
+  margin-top: 20px;
+}
+.mealsButton{
+  margin-top: 60px;
 }
 </style>
 <style>
-
+.el-form-item {
+  margin-bottom: 10px;
+}
 </style>
 
 
