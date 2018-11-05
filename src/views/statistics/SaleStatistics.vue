@@ -1,7 +1,7 @@
 <template>
   <section class="main-content">
     <el-row>
-      <span style="font-size:12px;display:inline-block;margin-bottom:20px;">销售单</span>
+      <span style="font-size:12px;display:inline-block;margin-bottom:20px;">销售统计</span>
       <el-col :span="24" clsss="form-content">
         <!-- 表单 -->
         <el-form>
@@ -13,36 +13,35 @@
             <el-button size="mini">本周</el-button>
             <el-button size="mini">本月</el-button>
           </el-form-item>
-          <el-form-item label="单据编号:">
-            <el-input placeholder="请输入单据编号" style='width:15%' size="mini"></el-input>
+          <el-form-item label="客户：">
+              <el-select placeholder="请选择" v-model="value" size="mini">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" size="mini">立即查询</el-button>
             <el-button type="warning" size="mini">批量导出</el-button>
             <el-button type="warning" size="mini">打印预览</el-button>
-            <el-button type="warning" style="float:right" size="mini">销售商品统计</el-button>
-            <el-button type="warning" style="float:right" size="mini">新增出库</el-button>
           </el-form-item>
         </el-form>
         <!-- 表格 -->
         <el-table :data="tableData" style="width: 100%" :header-cell-style="{background:'#e7edfd'}" :cell-class-name='setFirstClass' @cell-click='cellClick'>
           <el-table-column type="index" label="序号">
           </el-table-column>
-          <el-table-column prop="date" label="单据号">
+          <el-table-column prop="date" label="商品名称">
           </el-table-column>
-          <el-table-column prop="name" label="单据日期">
+          <el-table-column prop="name" label="条形码">
           </el-table-column>
-          <el-table-column prop="address" label="销售客户">
+          <el-table-column prop="address" label="分类">
           </el-table-column>
-          <el-table-column prop="address" label="应售金额">
+          <el-table-column prop="address" label="规格">
           </el-table-column>
-          <el-table-column prop="address" label="折后金额">
+          <el-table-column prop="address" label="销售数量">
           </el-table-column>
-          <el-table-column prop="address" label="已收金额">
+          <el-table-column prop="address" label="应收金额">
           </el-table-column>
-          <el-table-column prop="address" label="结算">
-          </el-table-column>
-          <el-table-column prop="address" label="操作员工">
+          <el-table-column prop="address" label="实收总额">
           </el-table-column>
           <el-table-column prop="name" label="操作">
             <!-- <template scope="scope">
@@ -85,6 +84,52 @@ const ERR_OK = "000";
 export default {
   data() {
     return {
+      options: [
+        {
+          value: "选项1",
+          label: "黄金糕"
+        },
+        {
+          value: "选项2",
+          label: "双皮奶"
+        },
+        {
+          value: "选项3",
+          label: "蚵仔煎"
+        },
+        {
+          value: "选项4",
+          label: "龙须面"
+        },
+        {
+          value: "选项5",
+          label: "北京烤鸭"
+        }
+      ],
+      value: "",
+      options1: [
+        {
+          value: "选项1",
+          label: "黄金糕"
+        },
+        {
+          value: "选项2",
+          label: "双皮奶"
+        },
+        {
+          value: "选项3",
+          label: "蚵仔煎"
+        },
+        {
+          value: "选项4",
+          label: "龙须面"
+        },
+        {
+          value: "选项5",
+          label: "北京烤鸭"
+        }
+      ],
+      value1: "",
       formInline: {
         user: {
           name: "",
@@ -94,7 +139,6 @@ export default {
         }
       },
       tableData: [],
-      options: [],
       places: [],
       dialogFormVisible: false,
       editLoading: false,
@@ -111,28 +155,31 @@ export default {
     this.$http.get("/api/getTable").then(response => {
       response = response.data;
       if (response.code === ERR_OK) {
-        this.tableData = response.datas.slice(0, 10);
-        console.log(this.tableData)
+        this.tableData = response.datas.slice(0, 5);
+        console.log(this.tableData);
       }
     });
     this.$http.get("/api/getOptions").then(response => {
       response = response.data;
       console.log(response);
       if (response.code === ERR_OK) {
-        this.options = response.datas;
+        // this.options = response.datas;
         this.places = response.places;
       }
     });
   },
   methods: {
     setFirstClass(ss) {
-      const {columnIndex} = ss
+      const { columnIndex } = ss;
       if (columnIndex === 9) {
-        return 'addMyClassName'
+        return "addMyClassName";
       }
     },
+    addPurForm() {
+      this.$router.push({path: '/purchase-form'})
+    },
     cellClick(row, column, cell, event) {
-      this.$router.push({path: '/sale-detail', query: {aa: '1'}})
+      this.$router.push({ path: "/purchase-detail", query: { aa: "1" } });
     },
     onSubmit() {
       this.$message("模拟数据，这个方法并不管用哦~");
@@ -216,24 +263,24 @@ export default {
   float: right;
   margin-left: 10px;
 }
-.total{
+.total {
   margin-top: 15px;
 }
-.total>span{
-  font-weight:bolder;
+.total > span {
+  font-weight: bolder;
   display: inline-block;
   margin-right: 12px;
 }
-.yellowColor{
+.yellowColor {
   color: #ff9909;
 }
 </style>
 <style>
-.main-content .addMyClassName{
-  color:#6389f4;
+.main-content .addMyClassName {
+  color: #6389f4;
 }
-.block>.el-pagination{
-  margin-top:10px;
+.block > .el-pagination {
+  margin-top: 10px;
 }
 </style>
 

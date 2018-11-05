@@ -5,7 +5,7 @@
       <el-row class="content">
         <!-- 左侧菜单栏 -->
         <el-col :span="3" class="aside">
-          <el-menu class="el-menu-vertical-demo" unique-opened :default-active='defaultActive' router @select='menuSelect'>
+          <el-menu class="el-menu-vertical-demo" unique-opened :default-active='defaultActive'  @select='menuSelect'>
             <el-menu-item index='/home'>
               <template slot="title">
                 <svg class="icon" aria-hidden="true">
@@ -58,16 +58,16 @@
                 <span>资产管理</span>
               </template>
               <el-menu-item-group>
-                <router-link to='/table'>
+                <router-link to='/receipt'>
                   <el-menu-item index="3-1">收款单</el-menu-item>
                 </router-link>
-                <router-link to='/form'>
+                <router-link to='/payment-order'>
                   <el-menu-item index="3-2">付款单</el-menu-item>
                 </router-link>
-                <router-link to='/editor'>
+                <router-link to='/receivables-query'>
                   <el-menu-item index="3-3">应收款查询</el-menu-item>
                 </router-link>
-                <router-link to='/statistics'>
+                <router-link to='/payables-query'>
                   <el-menu-item index="3-4">应付款查询</el-menu-item>
                 </router-link>
               </el-menu-item-group>
@@ -80,17 +80,14 @@
                 <span>统计分析</span>
               </template>
               <el-menu-item-group>
-                <router-link to='/table'>
-                  <el-menu-item index="4-1">收款单</el-menu-item>
+                <router-link to='/purchase-statistics'>
+                  <el-menu-item index="4-1">采购统计</el-menu-item>
                 </router-link>
-                <router-link to='/form'>
-                  <el-menu-item index="4-2">付款单</el-menu-item>
+                <router-link to='/sale-statistics'>
+                  <el-menu-item index="4-2">销售统计</el-menu-item>
                 </router-link>
-                <router-link to='/editor'>
-                  <el-menu-item index="4-3">应收款查询</el-menu-item>
-                </router-link>
-                <router-link to='/statistics'>
-                  <el-menu-item index="4-4">应付款查询</el-menu-item>
+                <router-link to='/sale-margin'>
+                  <el-menu-item index="4-3">销售毛利</el-menu-item>
                 </router-link>
               </el-menu-item-group>
             </el-submenu>
@@ -102,10 +99,10 @@
                 <span>权限管理</span>
               </template>
               <el-menu-item-group>
-                <router-link to='/table'>
+                <router-link to='/staff-management'>
                   <el-menu-item index="5-1">员工管理</el-menu-item>
                 </router-link>
-                <router-link to='/form'>
+                <router-link to='/office-management'>
                   <el-menu-item index="5-2">职务管理</el-menu-item>
                 </router-link>
               </el-menu-item-group>
@@ -118,7 +115,7 @@
                 <span>基本信息</span>
               </template>
               <el-menu-item-group>
-                <router-link to='/table'>
+                <router-link to='/supplier-management'>
                   <el-menu-item index="6-1">供应商管理</el-menu-item>
                 </router-link>
                 <router-link to='/form'>
@@ -178,8 +175,8 @@ export default {
     sessionStorage.setItem('defaultActive', '')
   },
   methods: {
-    menuSelect(val) {
-      console.log(val)
+    menuSelect(val, indexPath) {
+      console.log(val, indexPath)
       sessionStorage.setItem('defaultActive', val);
     },
   },

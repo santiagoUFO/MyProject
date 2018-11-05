@@ -16,7 +16,7 @@
       </el-form-item>
       <el-form-item label="套餐价格：">
         <el-input placeholder="请输入内容" style='width:200px' size='mini'>
-          <i slot="suffix" class="iconfont" N>&#xe65b;</i>
+          <i slot="suffix" class="iconfont" >&#xe65b;</i>
         </el-input>
       </el-form-item>
       <el-form-item label="开始日期：">
