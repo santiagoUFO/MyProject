@@ -11,6 +11,9 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_SHOW_LOGIN: (state, flag) => {
+    state.showLogin = flag
   }
 }
 

@@ -151,14 +151,17 @@
 <script>
 import header from "./views/header/header.vue";
 import LoginModule from './views/Login/LoginModule'
+import { mapGetters } from 'vuex'
 const ERR_OK = "000";
 export default {
   data() {
     return {
       user: {},
       defaultActive: '',
-      showLogin: true
     };
+  },
+  computed: {
+    ...mapGetters(['showLogin'])
   },
   created() {
     this.defaultActive = sessionStorage.getItem('defaultActive')
@@ -170,9 +173,9 @@ export default {
     });
   },
   beforeCreate() {
-    if (this.$route.path === "/") {
-      this.$router.push({ path: "/index" });
-    }
+    // if (this.$route.path === "/") {
+    //   this.$router.push({ path: "/index" });
+    // }
   },
   beforeDestroy() {
     sessionStorage.setItem('defaultActive', '')

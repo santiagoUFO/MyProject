@@ -34,7 +34,7 @@
 
 <script>
 import { isvalidUsername } from "../../utils/validate";
-
+import { mapMutations, mapActions } from 'vuex';
 export default {
   name: "Login",
   data() {
@@ -46,11 +46,12 @@ export default {
       }
     };
     const validatePass = (rule, value, callback) => {
-      if (value.length < 5) {
-        callback(new Error("密码不能小于5位"));
-      } else {
-        callback();
-      }
+      // if (value.length < 3) {
+      //   callback(new Error("密码不能小于5位"));
+      // } else {
+      //   callback();
+      // }
+      callback();
     };
     return {
       loginForm: {
@@ -68,6 +69,7 @@ export default {
       redirect: undefined
     };
   },
+
   watch: {
     // $route: {
     //   handler: function(route) {
@@ -90,9 +92,11 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('Login', this.loginForm).then(() => {
+          this.Login(this.loginForm).then(() => {
+            console.log('222')
             this.loading = false
-            this.$router.push({ path: this.redirect || '/' })
+            this.SET_SHOW_LOGIN(false)
+            this.$router.push({ path: this.redirect || '/' });
           }).catch(() => {
             this.loading = false
           })
@@ -101,7 +105,9 @@ export default {
           return false
         }
       })
-    }
+    },
+    ...mapActions(['Login']),
+    ...mapMutations(['SET_SHOW_LOGIN'])
   }
 
 };

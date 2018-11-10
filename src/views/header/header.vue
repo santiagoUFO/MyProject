@@ -8,19 +8,26 @@
         <li>
           <span class="header-lang is-active">lijian</span>
           <span class="header-opacity">({{user.area}}/{{user.identity}})</span>
+          <el-button type="primary" size="mini" style="margin-left:20px;" @click='loginOut'>退出登录</el-button>
         </li>
-        <li></li>
       </ul>
     </header>
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 export default {
   props: {
     user: {}
   },
   data() {
     return {};
+  },
+  methods: {
+    loginOut () {
+      this.LogOut()
+    },
+    ...mapActions(['LogOut'])
   }
 };
 </script>

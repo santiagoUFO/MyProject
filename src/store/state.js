@@ -3,6 +3,7 @@ const state = {
   token: getToken(),
   name: '',
   avatar: '',
-  roles: []
+  roles: [],
+  showLogin: true,
 }
 export default state
