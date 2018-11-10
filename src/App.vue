@@ -1,6 +1,7 @@
 <template>
   <div class="container" style="height: 100%">
-    <el-row>
+    <login-module v-if="showLogin"></login-module>
+    <el-row v-else>
       <v-header :user="user"></v-header>
       <el-row class="content">
         <!-- 左侧菜单栏 -->
@@ -149,12 +150,14 @@
 </template>
 <script>
 import header from "./views/header/header.vue";
+import LoginModule from './views/Login/LoginModule'
 const ERR_OK = "000";
 export default {
   data() {
     return {
       user: {},
       defaultActive: '',
+      showLogin: true
     };
   },
   created() {
@@ -181,7 +184,8 @@ export default {
     },
   },
   components: {
-    "v-header": header
+    "v-header": header,
+    LoginModule,
   }
 };
 </script>

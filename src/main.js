@@ -6,7 +6,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import App from './App';
 import router from './router'
-
+import store from './store'
 import 'font-awesome/css/font-awesome.min.css';
 import Mock from './mock/mock';
 
@@ -40,6 +40,7 @@ Vue.use(ElementUI);
 
 new Vue({
   el: '#app',
+  store,
   router,
   render: h => h(App),
   // template: '<App/>',
