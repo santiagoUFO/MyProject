@@ -5,12 +5,12 @@ import { setToken, removeToken } from '@/utils/auth'
 // 登录
 
 export const Login = function ({ commit }, userInfo) {
-  console.log(userInfo)
+  // console.log(userInfo)
   const username = userInfo.username.trim()
   return new Promise((resolve, reject) => {
     login(username, userInfo.password).then(res => {
       const data = res.data;
-      console.log(data)
+      // console.log(data)
       setToken(data._token)
       commit('SET_TOKEN', data._token)
       resolve(res)

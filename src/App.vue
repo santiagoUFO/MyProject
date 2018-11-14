@@ -119,10 +119,10 @@
                 <router-link to='/supplier-management'>
                   <el-menu-item index="6-1">供应商管理</el-menu-item>
                 </router-link>
-                <router-link to='/form'>
+                <router-link to='/customer-management'>
                   <el-menu-item index="6-2">客户管理</el-menu-item>
                 </router-link>
-                <router-link to='/table'>
+                <router-link to='/settlement-account'>
                   <el-menu-item index="6-3">结算账户</el-menu-item>
                 </router-link>
                 <router-link to='/form'>
@@ -182,7 +182,7 @@ export default {
   },
   methods: {
     menuSelect(val, indexPath) {
-      console.log(val, indexPath)
+      // console.log(val, indexPath)
       sessionStorage.setItem('defaultActive', val);
     },
   },

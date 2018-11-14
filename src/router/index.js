@@ -33,6 +33,8 @@ import OfficeManagement from "../views/AuthorityManagement/OfficeManagement.vue"
 import AuthorityManagement from "../views/AuthorityManagement/AuthorityManagement.vue";
 // 基本信息
 import SupplierManagement from "../views/BasicInformation/SupplierManagement.vue";
+import CustomerManagement from "../views/BasicInformation/CustomerManagement.vue";
+import SettlementAccount from "../views/BasicInformation/SettlementAccount.vue";
 // import statistics from '../views/statistics/statistics';
 import authority from '../views/authority/authority';
 import information from '../views/information/information';
@@ -75,10 +77,12 @@ let routes = [
   { path: '/office-management', component: OfficeManagement, name: '职务管理', class: 'fa-database' },
   { path: '/authority-management', component: AuthorityManagement, name: '权限管理', class: 'fa-database' },
   // 基本信息
-  { path: '/supplier-management', component: SupplierManagement, name: '供应商管理', class: 'fa-database' },
+  { path: '/supplier-management', component: SupplierManagement, name: '供应商管理' },
+  { path: '/customer-management', component: CustomerManagement, name: '客户管理' },
+  { path: '/settlement-account', component: SettlementAccount, name: '结算账户' },
   // { path: '/statistics', component: statistics, name: '统计分析', class: 'fa-line-chart' },
-  { path: '/authority', component: authority, name: '权限管理', class: 'fa-database' },
-  { path: '/information', component: information, name: '基本信息', class: 'fa-database' }
+  { path: '/authority', component: authority, name: '权限管理' },
+  { path: '/information', component: information, name: '基本信息' }
 ];
 export default new VueRouter({
   // 'mode': 'history', 去掉URL的#号，需要配置服务器http://router.vuejs.org/zh-cn/essentials/history-mode.html

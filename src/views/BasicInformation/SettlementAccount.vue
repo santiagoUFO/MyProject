@@ -1,21 +1,11 @@
 <template>
   <section class="main-content">
     <el-row>
-      <span style="font-size:12px;display:inline-block;margin-bottom:20px;">供应商管理</span>
+      <span style="font-size:12px;display:inline-block;margin-bottom:20px;">结算账户</span>
       <el-col :span="24" clsss="form-content">
-        <el-row type="flex" justify="center">
-          <el-col :span="8">
-            <el-form>
-              <el-form-item label="供应商：">
-                <el-input style="width:50%" size="mini" placeholder="请输入供应商名称"></el-input>
-                <el-button type="warning" @click="onSubmit" size="mini">立即查询</el-button>
-              </el-form-item>
-            </el-form>
-          </el-col>
-        </el-row>
         <el-row type="flex" justify="end">
           <el-col :span='3' style="margin-bottom:20px;">
-            <el-button type="primary" size="mini" @click='AddSupplier'>添加供应商</el-button>
+            <el-button type="primary" size="mini" @click='AddSupplier'>添加账户</el-button>
           </el-col>
         </el-row>
 
@@ -23,17 +13,13 @@
         <el-table :data="tableData" style="width: 100%" :header-cell-style="{background:'#e7edfd'}" :cell-class-name='setFirstClass'>
           <el-table-column type="index" label="序号">
           </el-table-column>
-          <el-table-column prop="vendor_name" label="单位名称">
+          <el-table-column prop="username" label="账户名称">
           </el-table-column>
-          <el-table-column prop="vendor_tel" label="单位电话">
+          <el-table-column prop="linkman" label="账户类型">
           </el-table-column>
-          <el-table-column prop="vendor_addr" label="单位地址">
+          <el-table-column prop="tel" label="账户账号">
           </el-table-column>
-          <el-table-column prop="vendor_contacts" label="责任人">
-          </el-table-column>
-          <el-table-column prop="vendor_mobile" label="责任人电话">
-          </el-table-column>
-          <el-table-column prop="create_time" label="添加日期">
+          <el-table-column prop="vip_user_grade_name" label="当前余额">
           </el-table-column>
           <el-table-column label="操作">
             <template scope="scope">
@@ -48,31 +34,42 @@
         </div>
       </el-col>
     </el-row>
-    <el-dialog title="添加供应商" :visible="dialogFormVisible" size="tiny">
+    <el-dialog title="添加客户" :visible="dialogFormVisible" size="tiny">
       <el-form ref="form" :model="form" label-width="80px">
         <el-form-item>
           <el-col :span='12'>
-            <span>单位名称：</span>
-            <el-input placeholder="请输入单位名称" style="width:60%" size="mini" v-model="form.vendor_name"></el-input>
+            <span>客户名称：</span>
+            <el-input placeholder="请输入客户名称" style="width:60%" size="mini" v-model="form.username"></el-input>
           </el-col>
           <el-col :span='12'>
-            <span>单位电话：</span>
-            <el-input placeholder="请输入单位电话" style="width:50%" size="mini" v-model="form.vendor_tel"></el-input>
+            <span>客户等级：</span>
+            <el-select v-model="form.vip_user_grade_name" placeholder="请选择">
+              <el-option v-for="item in options" :key="item.vip_grade" :label="item.vip_user_grade_name" :value="item.vip_user_grade_name">
+              </el-option>
+            </el-select>
           </el-col>
+        </el-form-item>
+        <el-form-item>
+          <el-col :span='12'>
+            <span>&nbsp;&nbsp;&nbsp;联系人：</span>
+            <el-input placeholder="请输入联系人名称" style="width:60%" size="mini" v-model="form.linkman"></el-input>
+          </el-col>
+          <el-col :span='12'>
+            <span>联系电话：</span>
+            <el-input placeholder="请输入联系电话：" style="width:50%" size="mini" v-model="form.tel"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item>
+          <span>初始应收：</span>
+          <el-input v-model="form.amount_top" style="width:30%" size="mini"></el-input>
         </el-form-item>
         <el-form-item>
           <span>单位地址：</span>
-          <el-input v-model="form.vendor_addr" style="width:75%" placeholder="请输入单位地址"></el-input>
+          <el-input v-model="form.work_address" style="width:75%" placeholder="请输入单位地址"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-col :span='12'>
-            <span>&nbsp;&nbsp;&nbsp;责任人：</span>
-            <el-input placeholder="请输入单位名称" style="width:60%" size="mini" v-model="form.vendor_contacts"></el-input>
-          </el-col>
-          <el-col :span='12'>
-            <span>责任人电话：</span>
-            <el-input placeholder="请输入单位电话" style="width:50%" size="mini" v-model="form.vendor_mobile"></el-input>
-          </el-col>
+          <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;备注：</span>
+          <el-input v-model="form.remark" style="width:75%" placeholder="请输入备注内容:"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleSave" :loading="editLoading">{{dialogText ? '确定' : '修改'}}</el-button>
@@ -85,64 +82,54 @@
 <script type="text/ecmascript-6">
 // const ERR_OK = "000";
 import {
-  supplierList,
-  supplierAdd,
-  supplierEdit,
-  supplierDel
-} from "@/api/basicInfo/supplierManagement.js";
+  customerList,
+  customerEdit,
+  customerDel,
+  customerAdd,
+  customerGrade
+} from "@/api/basicInfo/customerManagement.js";
 export default {
   data() {
     return {
-      options: [
-        {
-          value: "选项1",
-          label: "黄金糕"
-        },
-        {
-          value: "选项2",
-          label: "双皮奶"
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎"
-        },
-        {
-          value: "选项4",
-          label: "龙须面"
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭"
-        }
-      ],
+      options: [],
       value: "",
       tableData: [],
       places: [],
       dialogFormVisible: false,
       editLoading: false,
       form: {
-        vendor_name: "",
-        vendor_tel: "",
-        vendor_contacts: "",
-        vendor_addr: "",
-        vendor_mobile: ""
+        username: "",
+        tel: "",
+        linkman: "",
+        address: "",
+        work_address: "",
+        remark: "",
+        vip_grade: ""
       },
       currentPage: 1,
       table_index: 999,
       dialogText: true,
-      totalItem: null,
+      totalItem: null
     };
   },
   created() {
     this.queryList();
+    customerGrade()
+      .then(res => {
+        console.log("171", res);
+        this.options = res.data;
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
   methods: {
     queryList() {
-      const token = this.$store.state.token;
-      supplierList(token)
+      customerList()
         .then(res => {
-          this.tableData = res.data.data;
-          this.totalItem = Number(res.data.total)
+          console.log(res);
+          this.tableData = res.data;
+          this.totalItem = Number(res.data.total);
         })
         .catch(err => {
           console.log(err);
@@ -157,17 +144,15 @@ export default {
     addPurForm() {
       this.$router.push({ path: "/purchase-form" });
     },
-    onSubmit() {
-      this.$message("模拟数据，这个方法并不管用哦~");
-    },
     handleDelete(index, row) {
+      console.log(row)
       this.$confirm("确认提交吗？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         cancelButtonClass: "cancel"
       })
         .then(() => {
-          supplierDel(row.vendor_id, this.$store.state.token)
+          customerDel(row.id)
             .then(res => {
               this.queryList();
               if (res.code === 200) {
@@ -187,13 +172,14 @@ export default {
         });
     },
     handleEdit(index, row) {
-      // console.log(index, row);
+      console.log(index, row);
       this.dialogFormVisible = true;
       this.form = Object.assign({}, row);
       this.table_index = index;
       this.dialogText = false;
     },
     handleSave() {
+      this.dialogText = true;
       this.$confirm("确认提交吗？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -201,11 +187,10 @@ export default {
       })
         .then(() => {
           if (this.dialogText) {
-            // 添加供应商请求
-            supplierAdd(this.form, this.$store.state.token)
+            // 添加客户
+            customerAdd(this.form)
               .then(res => {
-                console.log(res);
-                this.tableData.splice(0, 0, this.form);
+                this.queryList();
                 this.$message({
                   message: "操作成功！",
                   type: "success"
@@ -218,7 +203,7 @@ export default {
               });
           } else {
             // 编辑供应商
-            supplierEdit(this.form, this.$store.state.token)
+            customerEdit(this.form)
               .then(res => {
                 this.queryList();
                 this.$message({
@@ -258,9 +243,7 @@ export default {
     },
     AddSupplier() {
       this.dialogFormVisible = true;
-      if (this.dialogText) {
-        this.form = {}
-      }
+      this.form = {};
     }
   }
 };
