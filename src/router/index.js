@@ -35,6 +35,7 @@ import AuthorityManagement from "../views/AuthorityManagement/AuthorityManagemen
 import SupplierManagement from "../views/BasicInformation/SupplierManagement.vue";
 import CustomerManagement from "../views/BasicInformation/CustomerManagement.vue";
 import SettlementAccount from "../views/BasicInformation/SettlementAccount.vue";
+import GoodsClassification from "../views/BasicInformation/GoodsClassification.vue";
 // import statistics from '../views/statistics/statistics';
 import authority from '../views/authority/authority';
 import information from '../views/information/information';
@@ -80,6 +81,7 @@ let routes = [
   { path: '/supplier-management', component: SupplierManagement, name: '供应商管理' },
   { path: '/customer-management', component: CustomerManagement, name: '客户管理' },
   { path: '/settlement-account', component: SettlementAccount, name: '结算账户' },
+  { path: '/goods-classification', component: GoodsClassification, name: '货品分类' },
   // { path: '/statistics', component: statistics, name: '统计分析', class: 'fa-line-chart' },
   { path: '/authority', component: authority, name: '权限管理' },
   { path: '/information', component: information, name: '基本信息' }

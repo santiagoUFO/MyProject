@@ -13,14 +13,14 @@
         <el-table :data="tableData" style="width: 100%" :header-cell-style="{background:'#e7edfd'}" :cell-class-name='setFirstClass'>
           <el-table-column type="index" label="序号">
           </el-table-column>
-          <el-table-column prop="username" label="账户名称">
+          <el-table-column prop="payment_type_name" label="账户名称">
           </el-table-column>
-          <el-table-column prop="linkman" label="账户类型">
+          <el-table-column prop="payment_mode_name" label="账户类型">
           </el-table-column>
-          <el-table-column prop="tel" label="账户账号">
+          <!-- <el-table-column prop="tel" label="账户账号">
           </el-table-column>
           <el-table-column prop="vip_user_grade_name" label="当前余额">
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column label="操作">
             <template scope="scope">
               <span @click.stop="handleEdit(scope.$index, scope.row)" style="color:rgb(98, 136, 247);margin-right: 5px;">编辑</span>
@@ -34,16 +34,16 @@
         </div>
       </el-col>
     </el-row>
-    <el-dialog title="添加客户" :visible="dialogFormVisible" size="tiny">
+    <el-dialog :title="titleText" :visible="dialogFormVisible" size="tiny">
       <el-form ref="form" :model="form" label-width="80px">
         <el-form-item>
           <el-col :span='12'>
-            <span>客户名称：</span>
+            <span>账户名称：</span>
             <el-input placeholder="请输入客户名称" style="width:60%" size="mini" v-model="form.username"></el-input>
           </el-col>
           <el-col :span='12'>
-            <span>客户等级：</span>
-            <el-select v-model="form.vip_user_grade_name" placeholder="请选择">
+            <span>账户类型：</span>
+            <el-select v-model="form.vip_user_grade_name" placeholder="请选择账户类型" size="mini">
               <el-option v-for="item in options" :key="item.vip_grade" :label="item.vip_user_grade_name" :value="item.vip_user_grade_name">
               </el-option>
             </el-select>
@@ -51,26 +51,26 @@
         </el-form-item>
         <el-form-item>
           <el-col :span='12'>
-            <span>&nbsp;&nbsp;&nbsp;联系人：</span>
-            <el-input placeholder="请输入联系人名称" style="width:60%" size="mini" v-model="form.linkman"></el-input>
+            <span>账户账号：</span>
+            <el-input placeholder="银行卡账号或其他账号" style="width:60%" size="mini" v-model="form.linkman"></el-input>
           </el-col>
           <el-col :span='12'>
-            <span>联系电话：</span>
-            <el-input placeholder="请输入联系电话：" style="width:50%" size="mini" v-model="form.tel"></el-input>
+            <span>初始余额：</span>
+            <el-input placeholder="请输入联系电话" style="width:50%" size="mini" v-model="form.tel"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item>
-          <span>初始应收：</span>
+          <span>当前余额：</span>
           <el-input v-model="form.amount_top" style="width:30%" size="mini"></el-input>
         </el-form-item>
-        <el-form-item>
+        <!-- <el-form-item>
           <span>单位地址：</span>
           <el-input v-model="form.work_address" style="width:75%" placeholder="请输入单位地址"></el-input>
         </el-form-item>
         <el-form-item>
           <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;备注：</span>
           <el-input v-model="form.remark" style="width:75%" placeholder="请输入备注内容:"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button type="primary" @click="handleSave" :loading="editLoading">{{dialogText ? '确定' : '修改'}}</el-button>
           <el-button @click="dialogFormVisible = false">取消</el-button>
@@ -82,12 +82,9 @@
 <script type="text/ecmascript-6">
 // const ERR_OK = "000";
 import {
-  customerList,
-  customerEdit,
-  customerDel,
-  customerAdd,
-  customerGrade
-} from "@/api/basicInfo/customerManagement.js";
+  settlementAccountList,
+  AccountTypeList
+} from "@/api/basicInfo/SettlementAccount.js";
 export default {
   data() {
     return {
@@ -114,18 +111,20 @@ export default {
   },
   created() {
     this.queryList();
-    customerGrade()
-      .then(res => {
-        console.log("171", res);
-        this.options = res.data;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    AccountTypeList().then(res => {
+      console.log(res)
+    }).catch(err => {
+      console.log(err)
+    })
+  },
+  computed: {
+    titleText() {
+      return this.dialogText ? "添加账户" : "修改账户"
+    }
   },
   methods: {
     queryList() {
-      customerList()
+      settlementAccountList()
         .then(res => {
           console.log(res);
           this.tableData = res.data;

@@ -128,7 +128,7 @@
                 <router-link to='/form'>
                   <el-menu-item index="6-4">货物档案</el-menu-item>
                 </router-link>
-                <router-link to='/table'>
+                <router-link to='/goods-classification'>
                   <el-menu-item index="6-5">货品分类</el-menu-item>
                 </router-link>
                 <router-link to='/form'>
