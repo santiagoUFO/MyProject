@@ -4,23 +4,21 @@
       <span style="font-size:12px;display:inline-block;margin-bottom:20px;">采购单</span>
       <el-col :span="24" clsss="form-content">
         <!-- 表单 -->
-        <el-form>
+        <el-form :model="ruleForm" ref="ruleForm">
           <el-form-item label="时间筛选：">
-            <el-date-picker type="date" placeholder="选择日期" size="mini"></el-date-picker>
-            <span>至</span>
-            <el-date-picker type="date" placeholder="选择日期" size="mini"></el-date-picker>
-            <el-button size="mini">今日</el-button>
-            <el-button size="mini">本周</el-button>
-            <el-button size="mini">本月</el-button>
+            <div class="block">
+              <el-date-picker v-model="ruleForm.dateArr" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2" @change="selectDate" value-format="yyyy-MM-dd" size="mini">
+              </el-date-picker>
+            </div>
           </el-form-item>
           <el-form-item label="单据编号:" size="mini">
-            <el-input placeholder="请输入单据编号" style='width:15%'></el-input>
+            <el-input placeholder="请输入单据编号" style='width:15%' v-model="ruleForm.ticketNumber"></el-input>
           </el-form-item>
           <el-form-item>
             <el-col :span='10'>
               <span style='color:#606266'>供应商：</span>
-              <el-select placeholder="请选择" v-model="value" size="mini">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+              <el-select placeholder="请选择" v-model="ruleForm.supplierId" size="mini">
+                <el-option v-for="item in options" :key="item.value" :label="item.vendor_name" :value="item.vendor_id">
                 </el-option>
               </el-select>
             </el-col>
@@ -34,7 +32,7 @@
             </el-col>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" size="mini">立即查询</el-button>
+            <el-button type="primary" size="mini"  @click="QueryList('ruleForm', ruleForm)">立即查询</el-button>
             <el-button type="warning" size="mini">批量导出</el-button>
             <el-button type="warning" size="mini">打印预览</el-button>
             <el-button type="warning" style="float:right" size="mini">进货统计</el-button>
@@ -45,27 +43,25 @@
         <el-table :data="tableData" style="width: 100%" :header-cell-style="{background:'#e7edfd'}" :cell-class-name='setFirstClass' @cell-click='cellClick'>
           <el-table-column type="index" label="序号">
           </el-table-column>
-          <el-table-column prop="date" label="单据号">
+          <el-table-column prop="purchase_no" label="单据号">
           </el-table-column>
-          <el-table-column prop="name" label="单据日期">
+          <el-table-column prop="create_time" label="单据日期">
           </el-table-column>
-          <el-table-column prop="address" label="销售客户">
+          <el-table-column prop="vendor_name" label="供应商">
           </el-table-column>
-          <el-table-column prop="address" label="应售金额">
+          <el-table-column prop="total_goods_price" label="应付金额">
           </el-table-column>
-          <el-table-column prop="address" label="折后金额">
+          <el-table-column prop="total_amount" label="实付金额">
           </el-table-column>
-          <el-table-column prop="address" label="已收金额">
+          <el-table-column prop="payment_type_name" label="结算账户">
           </el-table-column>
-          <el-table-column prop="address" label="结算">
-          </el-table-column>
-          <el-table-column prop="address" label="操作员工">
+          <el-table-column prop="member_name" label="采购员">
           </el-table-column>
           <el-table-column prop="name" label="操作">
-            <!-- <template scope="scope">
-              <el-button type="primary" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-              <el-button type="danger" size="small" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-            </template> -->
+           <template  slot-scope="scope">
+              <el-button type="primary" size="small" @click="handleDetail(scope.$index, scope.row)">明细</el-button>
+              <!-- <el-button type="danger" size="small" @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
+            </template>
           </el-table-column>
         </el-table>
         <div class="total">
@@ -73,7 +69,7 @@
           <span>折后总额：<span class="yellowColor">$1000</span></span>
         </div>
         <div class="block">
-          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-size="100" layout="prev, pager, next, jumper" :total="1000">
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-size="100" layout="prev, pager, next, jumper" :total="totalItem">
           </el-pagination>
         </div>
       </el-col>
@@ -98,7 +94,8 @@
   </section>
 </template>
 <script type="text/ecmascript-6">
-const ERR_OK = "000";
+import { purchaseList } from "@/api/storage/purchaseOrders.js";
+import { supplierList } from "@/api/common.js";
 export default {
   data() {
     return {
@@ -166,27 +163,60 @@ export default {
         date: ""
       },
       currentPage: 4,
-      table_index: 999
+      table_index: 999,
+      pickerOptions2: {
+        shortcuts: [
+          {
+            text: "今日",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              // start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            }
+          }
+        ]
+      },
+      ruleForm: {
+        dateArr: [],
+        ticketNumber: "",
+        supplierId: ''
+      },
+      totalItem: null
     };
   },
   created() {
-    this.$http.get("/api/getTable").then(response => {
-      response = response.data;
-      if (response.code === ERR_OK) {
-        this.tableData = response.datas.slice(0, 10);
-        console.log(this.tableData);
-      }
-    });
-    this.$http.get("/api/getOptions").then(response => {
-      response = response.data;
-      console.log(response);
-      if (response.code === ERR_OK) {
-        // this.options = response.datas;
-        this.places = response.places;
-      }
-    });
+    purchaseList().then(res => {
+      console.log(res)
+      this.tableData = res.data.list.data
+      this.totalItem = Number(res.data.list.total)
+    })
+    supplierList().then(res => {
+      this.options = res.data
+    })
   },
   methods: {
+    selectDate(val) {
+      console.log(val);
+    },
     setFirstClass(ss) {
       const { columnIndex } = ss;
       if (columnIndex === 9) {
@@ -197,7 +227,7 @@ export default {
       this.$router.push({path: '/purchase-form'})
     },
     cellClick(row, column, cell, event) {
-      this.$router.push({ path: "/purchase-detail", query: { aa: "1" } });
+      // this.$router.push({ path: "/purchase-detail", query: { aa: "1" } });
     },
     onSubmit() {
       this.$message("模拟数据，这个方法并不管用哦~");
@@ -264,7 +294,28 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
       console.log(`当前页: ${val}`);
-    }
+    },
+    QueryList(formName, ruleForm) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          purchaseList(ruleForm)
+            .then(res => {
+              this.tableData = res.data.list.data;
+              // this.totalItem = Number(res.data.total)
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        } else {
+          console.log("error submit");
+          return false;
+        }
+      });
+    },
+    handleDetail(index, row) {
+      console.log(index, row);
+      this.$router.push({path: '/sale-detail', query: {order_id: row.order_id}})
+    },
   }
 };
 </script>

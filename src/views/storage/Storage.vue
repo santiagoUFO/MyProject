@@ -4,51 +4,53 @@
       <span style="font-size:12px;display:inline-block;margin-bottom:20px;">销售单</span>
       <el-col :span="24" clsss="form-content">
         <!-- 表单 -->
-        <el-form>
+        <el-form :model="ruleForm" ref="ruleForm">
           <el-form-item label="时间筛选：">
-            <el-date-picker type="date" placeholder="选择日期" size="mini"></el-date-picker>
+            <!-- <el-date-picker type="date" placeholder="选择日期" size="mini"></el-date-picker>
             <span>至</span>
             <el-date-picker type="date" placeholder="选择日期" size="mini"></el-date-picker>
             <el-button size="mini">今日</el-button>
             <el-button size="mini">本周</el-button>
-            <el-button size="mini">本月</el-button>
+            <el-button size="mini">本月</el-button> -->
+            <div class="block">
+              <el-date-picker v-model="ruleForm.dateArr" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2" @change="selectDate" value-format="yyyy-MM-dd" size="mini">
+              </el-date-picker>
+            </div>
           </el-form-item>
           <el-form-item label="单据编号:">
-            <el-input placeholder="请输入单据编号" style='width:15%' size="mini"></el-input>
+            <el-input placeholder="请输入单据编号" style='width:15%' size="mini" v-model="ruleForm.ticketNumber"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" size="mini">立即查询</el-button>
+            <el-button type="primary" size="mini" @click="QueryList('ruleForm', ruleForm)">立即查询</el-button>
             <el-button type="warning" size="mini">批量导出</el-button>
             <el-button type="warning" size="mini">打印预览</el-button>
-            <el-button type="warning" style="float:right" size="mini">销售商品统计</el-button>
-            <el-button type="warning" style="float:right" size="mini">新增出库</el-button>
+            <!-- <el-button type="warning" style="float:right" size="mini">销售商品统计</el-button> -->
+            <el-button type="warning" style="float:right" size="mini" @click="AddSaleForm">添加销售单</el-button>
           </el-form-item>
         </el-form>
         <!-- 表格 -->
-        <el-table :data="tableData" style="width: 100%" :header-cell-style="{background:'#e7edfd'}" :cell-class-name='setFirstClass' @cell-click='cellClick'>
+        <el-table :data="tableData" style="width: 100%" :header-cell-style="{background:'#e7edfd'}" :cell-class-name='setFirstClass' >
           <el-table-column type="index" label="序号">
           </el-table-column>
-          <el-table-column prop="date" label="单据号">
+          <el-table-column prop="inventory_record_no" label="单据号">
           </el-table-column>
-          <el-table-column prop="name" label="单据日期">
+          <el-table-column prop="create_time" label="单据日期">
           </el-table-column>
-          <el-table-column prop="address" label="销售客户">
+          <el-table-column prop="consignee" label="销售客户">
           </el-table-column>
-          <el-table-column prop="address" label="应售金额">
+          <el-table-column prop="order_price" label="应售金额">
           </el-table-column>
-          <el-table-column prop="address" label="折后金额">
+          <el-table-column prop="discount_amount" label="折后金额">
           </el-table-column>
-          <el-table-column prop="address" label="已收金额">
+          <el-table-column prop="total_amount" label="已收金额">
           </el-table-column>
-          <el-table-column prop="address" label="结算">
+          <el-table-column prop="member_name" label="操作员工">
           </el-table-column>
-          <el-table-column prop="address" label="操作员工">
-          </el-table-column>
-          <el-table-column prop="name" label="操作">
-            <!-- <template scope="scope">
-              <el-button type="primary" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-              <el-button type="danger" size="small" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-            </template> -->
+          <el-table-column label="操作">
+            <template  slot-scope="scope">
+              <el-button type="primary" size="small" @click="handleDetail(scope.$index, scope.row)">明细</el-button>
+              <!-- <el-button type="danger" size="small" @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
+            </template>
           </el-table-column>
         </el-table>
         <div class="total">
@@ -56,7 +58,7 @@
           <span>折后总额：<span class="yellowColor">$1000</span></span>
         </div>
         <div class="block">
-          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-size="100" layout="prev, pager, next, jumper" :total="1000">
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-size="100" layout="prev, pager, next, jumper" :total="totalItem">
           </el-pagination>
         </div>
       </el-col>
@@ -81,10 +83,11 @@
   </section>
 </template>
 <script type="text/ecmascript-6">
-const ERR_OK = "000";
+import { saleList } from "@/api/storage/saleTicket.js";
 export default {
   data() {
     return {
+      totalItem: null,
       formInline: {
         user: {
           name: "",
@@ -92,6 +95,41 @@ export default {
           address: [],
           place: ""
         }
+      },
+      pickerOptions2: {
+        shortcuts: [
+          {
+            text: "今日",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              // start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            }
+          }
+        ]
+      },
+      ruleForm: {
+        dateArr: [],
+        ticketNumber: ""
       },
       tableData: [],
       options: [],
@@ -108,47 +146,55 @@ export default {
     };
   },
   created() {
-    this.$http.get("/api/getTable").then(response => {
-      response = response.data;
-      if (response.code === ERR_OK) {
-        this.tableData = response.datas.slice(0, 10);
-        console.log(this.tableData)
-      }
-    });
-    this.$http.get("/api/getOptions").then(response => {
-      response = response.data;
-      console.log(response);
-      if (response.code === ERR_OK) {
-        this.options = response.datas;
-        this.places = response.places;
-      }
-    });
+    saleList()
+      .then(res => {
+        console.log("166", res);
+        this.tableData = res.data.data;
+        this.totalItem = Number(res.data.total)
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
   methods: {
-    setFirstClass(ss) {
-      const {columnIndex} = ss
-      if (columnIndex === 9) {
-        return 'addMyClassName'
-      }
+    AddSaleForm() {
+      this.$router.push({path: '/add-sale-form'})
     },
-    cellClick(row, column, cell, event) {
-      this.$router.push({path: '/sale-detail', query: {aa: '1'}})
+    QueryList(formName, ruleForm) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          saleList(ruleForm)
+            .then(res => {
+              this.tableData = res.data.data;
+              this.totalItem = Number(res.data.total)
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        } else {
+          console.log("error submit");
+          return false;
+        }
+      });
+    },
+    selectDate(val) {
+      console.log(val);
+    },
+    setFirstClass(ss) {
+      const { columnIndex } = ss;
+      if (columnIndex === 9) {
+        return "addMyClassName";
+      }
     },
     onSubmit() {
       this.$message("模拟数据，这个方法并不管用哦~");
     },
-    handleDelete(index, row) {
-      this.tableData.splice(index, 1);
-      this.$message({
-        message: "操作成功！",
-        type: "success"
-      });
-    },
-    handleEdit(index, row) {
+    handleDetail(index, row) {
       console.log(index, row);
-      this.dialogFormVisible = true;
-      this.form = Object.assign({}, row);
-      this.table_index = index;
+      this.$router.push({path: '/sale-detail', query: {order_id: row.order_id}})
+      // this.dialogFormVisible = true;
+      // this.form = Object.assign({}, row);
+      // this.table_index = index;
     },
     handleSave() {
       this.$confirm("确认提交吗？", "提示", {
@@ -199,6 +245,10 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
       console.log(`当前页: ${val}`);
+      saleList(this.ruleForm, val).then(res => {
+        this.tableData = res.data.data;
+        // this.totalItem = Number(res.data.total)
+      })
     }
   }
 };
@@ -216,24 +266,24 @@ export default {
   float: right;
   margin-left: 10px;
 }
-.total{
+.total {
   margin-top: 15px;
 }
-.total>span{
-  font-weight:bolder;
+.total > span {
+  font-weight: bolder;
   display: inline-block;
   margin-right: 12px;
 }
-.yellowColor{
+.yellowColor {
   color: #ff9909;
 }
 </style>
 <style>
-.main-content .addMyClassName{
-  color:#6389f4;
+.main-content .addMyClassName {
+  color: #6389f4;
 }
-.block>.el-pagination{
-  margin-top:10px;
+.block > .el-pagination {
+  margin-top: 10px;
 }
 </style>
 

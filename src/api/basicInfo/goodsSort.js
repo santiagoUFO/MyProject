@@ -4,7 +4,7 @@ import store from '@/store/index.js'
 
 // 商品分类-分类树
 
-export function goodsSortTree(paramsObj) {
+export function goodsSortTree() {
   return request({
     url: '/api/v1/goodsgroup/goodsgrouplist',
     params: {

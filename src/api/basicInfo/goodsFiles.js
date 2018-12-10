@@ -59,11 +59,13 @@ export function goodsFileEdit(paramsObj) {
 
 // 货物档案列表
 
-export function goodsFileList() {
+export function goodsFileList(paramsObj) {
   return request({
     url: '/api/v1/goods/index',
     params: {
       _token: store.state.token,
+      page: paramsObj ? paramsObj.page : '',
+      goods_group: paramsObj ? paramsObj.goods_group : ''
     }
   })
 }

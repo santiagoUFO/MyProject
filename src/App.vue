@@ -20,7 +20,7 @@
                 <svg class="icon" aria-hidden="true">
                   <use xlink:href="#icon-stock"></use>
                 </svg>
-                <span>仓储管理</span>
+                <span>仓库管理</span>
               </template>
               <el-menu-item-group>
                 <router-link to='/storage'>
@@ -125,7 +125,7 @@
                 <router-link to='/settlement-account'>
                   <el-menu-item index="6-3">结算账户</el-menu-item>
                 </router-link>
-                <router-link to='/form'>
+                <router-link to='/goods-files'>
                   <el-menu-item index="6-4">货物档案</el-menu-item>
                 </router-link>
                 <router-link to='/goods-classification'>

@@ -12,6 +12,7 @@ import InventoryDetail from '../views/storage/InventoryDetail';
 import GoodsReturn from '../views/storage/GoodsReturn';
 import GoodsReturnDetail from '../views/storage/GoodsReturnDetail';
 import AddGoodsReturn from '../views/storage/AddGoodsReturn';
+import AddSaleForm from '../views/storage/AddSaleForm';
 // 套餐组合
 import CombinationMeals from '../views/promotion/CombinationMeals'
 import AddCombinationMeals from '../views/promotion/AddCombinationMeals'
@@ -36,6 +37,7 @@ import SupplierManagement from "../views/BasicInformation/SupplierManagement.vue
 import CustomerManagement from "../views/BasicInformation/CustomerManagement.vue";
 import SettlementAccount from "../views/BasicInformation/SettlementAccount.vue";
 import GoodsClassification from "../views/BasicInformation/GoodsClassification.vue";
+import GoodsFiles from "../views/BasicInformation/GoodsFiles.vue";
 // import statistics from '../views/statistics/statistics';
 import authority from '../views/authority/authority';
 import information from '../views/information/information';
@@ -47,6 +49,7 @@ let routes = [
   { path: '/home', component: Home, name: '首页', class: 'fa-home' },
   // 仓库管理
   { path: '/storage', component: Storage, name: '仓储管理', class: 'fa-building-o' },
+  { path: '/add-sale-form', component: AddSaleForm, name: '仓储管理' },
   { path: '/purchase', component: Purchase, name: '采购单', class: 'fa-building-o' },
   { path: '/sale-detail', component: SaleDetail, name: '销售详情', class: 'fa-building-o' },
   { path: '/purchase-detail', component: SaleDetail, name: '采购单详情', class: 'fa-building-o' },
@@ -81,6 +84,7 @@ let routes = [
   { path: '/supplier-management', component: SupplierManagement, name: '供应商管理' },
   { path: '/customer-management', component: CustomerManagement, name: '客户管理' },
   { path: '/settlement-account', component: SettlementAccount, name: '结算账户' },
+  { path: '/goods-files', component: GoodsFiles, name: '货物档案' },
   { path: '/goods-classification', component: GoodsClassification, name: '货品分类' },
   // { path: '/statistics', component: statistics, name: '统计分析', class: 'fa-line-chart' },
   { path: '/authority', component: authority, name: '权限管理' },
