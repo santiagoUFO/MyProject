@@ -4,6 +4,7 @@ import Home from '../views/home/home';
 // 仓储管理
 import Storage from '../views/storage/Storage';
 import SaleDetail from '../views/storage/SaleDetail';
+import purchaseDetail from '../views/storage/purchaseDetail';
 import Purchase from '../views/storage/Purchase';
 import AddPurForm from '../views/storage/AddPurForm';
 import Stock from '../views/storage/Stock';
@@ -52,7 +53,7 @@ let routes = [
   { path: '/add-sale-form', component: AddSaleForm, name: '仓储管理' },
   { path: '/purchase', component: Purchase, name: '采购单', class: 'fa-building-o' },
   { path: '/sale-detail', component: SaleDetail, name: '销售详情', class: 'fa-building-o' },
-  { path: '/purchase-detail', component: SaleDetail, name: '采购单详情', class: 'fa-building-o' },
+  { path: '/purchase-detail', component: purchaseDetail, name: '采购单详情', class: 'fa-building-o' },
   { path: '/purchase-form', component: AddPurForm, name: '添加采购单', class: 'fa-building-o' },
   { path: '/inventory-profit', component: InventoryProfit, name: '盘盈', class: 'fa-building-o' },
   { path: '/inventory-detail', component: InventoryDetail, name: '盘盈明细', class: 'fa-building-o' },

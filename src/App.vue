@@ -193,6 +193,9 @@ export default {
 };
 </script>
 <style scoped>
+/* .el-menu-vertical-demo{
+  width:200px
+} */
 /* fa图标右侧需要流出空白 elementUI图标已自带样式 */
 .el-menu,
 .el-row,

@@ -2,64 +2,162 @@
   <section class="main-content">
     <el-row>
       <span style="font-size:12px;display:inline-block;margin-bottom:20px;">采购单</span>
-      <el-col :span="24" clsss="form-content">
+      <el-col
+        :span="24"
+        clsss="form-content"
+      >
         <!-- 表单 -->
-        <el-form :model="ruleForm" ref="ruleForm">
+        <el-form
+          :model="ruleForm"
+          ref="ruleForm"
+        >
           <el-form-item label="时间筛选：">
             <div class="block">
-              <el-date-picker v-model="ruleForm.dateArr" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2" @change="selectDate" value-format="yyyy-MM-dd" size="mini">
+              <el-date-picker
+                v-model="ruleForm.dateArr"
+                type="daterange"
+                align="right"
+                unlink-panels
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                :picker-options="pickerOptions2"
+                @change="selectDate"
+                value-format="yyyy-MM-dd"
+                size="mini"
+              >
               </el-date-picker>
             </div>
           </el-form-item>
-          <el-form-item label="单据编号:" size="mini">
-            <el-input placeholder="请输入单据编号" style='width:15%' v-model="ruleForm.ticketNumber"></el-input>
+          <el-form-item
+            label="单据编号:"
+            size="mini"
+          >
+            <el-input
+              placeholder="请输入单据编号"
+              style='width:15%'
+              v-model="ruleForm.ticketNumber"
+            ></el-input>
           </el-form-item>
           <el-form-item>
             <el-col :span='10'>
               <span style='color:#606266'>供应商：</span>
-              <el-select placeholder="请选择" v-model="ruleForm.supplierId" size="mini">
-                <el-option v-for="item in options" :key="item.value" :label="item.vendor_name" :value="item.vendor_id">
+              <el-select
+                placeholder="请选择"
+                v-model="ruleForm.supplierId"
+                size="mini"
+              >
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.vendor_name"
+                  :value="item.vendor_id"
+                >
                 </el-option>
               </el-select>
             </el-col>
             <el-col :span='10'>
               <span style='color:#606266'>采购员：</span>
-              <el-select v-model="value1" size="mini">
-                <el-option v-for="item in options1" :key="item.value" :label="item.label" :value="item.value">
+              <el-select
+                v-model="value1"
+                size="mini"
+              >
+                <el-option
+                  v-for="item in options1"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
                 </el-option>
               </el-select>
 
             </el-col>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" size="mini"  @click="QueryList('ruleForm', ruleForm)">立即查询</el-button>
-            <el-button type="warning" size="mini">批量导出</el-button>
-            <el-button type="warning" size="mini">打印预览</el-button>
-            <el-button type="warning" style="float:right" size="mini">进货统计</el-button>
-            <el-button type="warning" style="float:right" @click='addPurForm' size="mini">添加采购单</el-button>
+            <el-button
+              type="primary"
+              size="mini"
+              @click="QueryList('ruleForm', ruleForm)"
+            >立即查询</el-button>
+            <el-button
+              type="warning"
+              size="mini"
+            >批量导出</el-button>
+            <el-button
+              type="warning"
+              size="mini"
+            >打印预览</el-button>
+            <el-button
+              type="warning"
+              style="float:right"
+              size="mini"
+            >进货统计</el-button>
+            <el-button
+              type="warning"
+              style="float:right"
+              @click='addPurForm'
+              size="mini"
+            >添加采购单</el-button>
           </el-form-item>
         </el-form>
         <!-- 表格 -->
-        <el-table :data="tableData" style="width: 100%" :header-cell-style="{background:'#e7edfd'}" :cell-class-name='setFirstClass' @cell-click='cellClick'>
-          <el-table-column type="index" label="序号">
+        <el-table
+          :data="tableData"
+          style="width: 100%"
+          :header-cell-style="{background:'#e7edfd'}"
+          :cell-class-name='setFirstClass'
+          @cell-click='cellClick'
+        >
+          <el-table-column
+            type="index"
+            label="序号"
+          >
           </el-table-column>
-          <el-table-column prop="purchase_no" label="单据号">
+          <el-table-column
+            prop="purchase_no"
+            label="单据号"
+          >
           </el-table-column>
-          <el-table-column prop="create_time" label="单据日期">
+          <el-table-column
+            prop="create_time"
+            label="单据日期"
+          >
           </el-table-column>
-          <el-table-column prop="vendor_name" label="供应商">
+          <el-table-column
+            prop="vendor_name"
+            label="供应商"
+          >
           </el-table-column>
-          <el-table-column prop="total_goods_price" label="应付金额">
+          <el-table-column
+            prop="total_goods_price"
+            label="应付金额"
+          >
           </el-table-column>
-          <el-table-column prop="total_amount" label="实付金额">
+          <el-table-column
+            prop="total_amount"
+            label="实付金额"
+          >
           </el-table-column>
-          <el-table-column prop="payment_type_name" label="结算账户">
+          <el-table-column
+            prop="payment_type_name"
+            label="结算账户"
+          >
           </el-table-column>
-          <el-table-column prop="member_name" label="采购员">
+          <el-table-column
+            prop="member_name"
+            label="采购员"
+          >
           </el-table-column>
-          <el-table-column prop="name" label="操作">
-           <template  slot-scope="scope">
-              <el-button type="primary" size="small" @click="handleDetail(scope.$index, scope.row)">明细</el-button>
+          <el-table-column
+            prop="name"
+            label="操作"
+          >
+            <template slot-scope="scope">
+              <el-button
+                type="primary"
+                size="small"
+                @click="handleDetail(scope.$index, scope.row)"
+              >明细</el-button>
               <!-- <el-button type="danger" size="small" @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
             </template>
           </el-table-column>
@@ -69,13 +167,28 @@
           <span>折后总额：<span class="yellowColor">$1000</span></span>
         </div>
         <div class="block">
-          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-size="100" layout="prev, pager, next, jumper" :total="totalItem">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-size="100"
+            layout="prev, pager, next, jumper"
+            :total="totalItem"
+          >
           </el-pagination>
         </div>
       </el-col>
     </el-row>
-    <el-dialog title="修改个人信息" :visible="dialogFormVisible" size="tiny">
-      <el-form ref="form" :model="form" label-width="80px">
+    <el-dialog
+      title="修改个人信息"
+      :visible="dialogFormVisible"
+      size="tiny"
+    >
+      <el-form
+        ref="form"
+        :model="form"
+        label-width="80px"
+      >
         <el-form-item label="姓名">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
@@ -83,10 +196,19 @@
           <el-input v-model="form.address"></el-input>
         </el-form-item>
         <el-form-item label="出生日期">
-          <el-date-picker type="date" placeholder="选择日期" v-model="form.date" style="width: 100%;"></el-date-picker>
+          <el-date-picker
+            type="date"
+            placeholder="选择日期"
+            v-model="form.date"
+            style="width: 100%;"
+          ></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleSave" :loading="editLoading">修改</el-button>
+          <el-button
+            type="primary"
+            @click="handleSave"
+            :loading="editLoading"
+          >修改</el-button>
           <el-button @click="dialogFormVisible = false">取消</el-button>
         </el-form-item>
       </el-form>
@@ -198,20 +320,20 @@ export default {
       ruleForm: {
         dateArr: [],
         ticketNumber: "",
-        supplierId: ''
+        supplierId: ""
       },
       totalItem: null
     };
   },
   created() {
     purchaseList().then(res => {
-      console.log(res)
-      this.tableData = res.data.list.data
-      this.totalItem = Number(res.data.list.total)
-    })
+      console.log(res);
+      this.tableData = res.data.list.data;
+      this.totalItem = Number(res.data.list.total);
+    });
     supplierList().then(res => {
-      this.options = res.data
-    })
+      this.options = res.data;
+    });
   },
   methods: {
     selectDate(val) {
@@ -224,7 +346,7 @@ export default {
       }
     },
     addPurForm() {
-      this.$router.push({path: '/purchase-form'})
+      this.$router.push({ path: "/purchase-form" });
     },
     cellClick(row, column, cell, event) {
       // this.$router.push({ path: "/purchase-detail", query: { aa: "1" } });
@@ -294,6 +416,11 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
       console.log(`当前页: ${val}`);
+      purchaseList(this.ruleForm, val).then(res => {
+        console.log(res);
+        this.tableData = res.data.list.data;
+        this.totalItem = Number(res.data.list.total);
+      });
     },
     QueryList(formName, ruleForm) {
       this.$refs[formName].validate(valid => {
@@ -314,8 +441,11 @@ export default {
     },
     handleDetail(index, row) {
       console.log(index, row);
-      this.$router.push({path: '/sale-detail', query: {order_id: row.order_id}})
-    },
+      this.$router.push({
+        path: "/purchase-detail",
+        query: { order_id: row.purchase_id }
+      });
+    }
   }
 };
 </script>
